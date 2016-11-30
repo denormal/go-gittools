@@ -41,7 +41,7 @@ func IsWorkingCopy(path string) (bool, error) {
 		}
 
 		// we don't have a working copy
-		return false, MissingWorkingCopyError
+		return false, nil
 	}
 
 	// do we have git installed?
@@ -53,7 +53,7 @@ func IsWorkingCopy(path string) (bool, error) {
 	//		  platforms, so for now we take this simplistic approach
 	//		- it also saves having a dependency on "git" exit codes
 	if HasGit() {
-		return false, MissingWorkingCopyError
+		return false, nil
 	}
 
 	// either we encountered an error, or we don't have a working copy
@@ -64,6 +64,13 @@ func IsWorkingCopy(path string) (bool, error) {
 // path is within a git working copy. If path is "", the current working
 // directory of the process will be used.
 func WorkingCopy(path string) (string, error) {
+	// is GIT_WORK_TREE defined?
+	_env := os.Getenv("GIT_WORK_TREE")
+	if _env != "" {
+		return _env, nil
+	}
+
+	// attempt to run the git executable
 	_output, _err := RunInPath(path, _WORKING...)
 	if _err == nil {
 		_lines := strings.Split(string(_output), "\n")
