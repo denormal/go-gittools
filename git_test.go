@@ -47,7 +47,7 @@ func TestGit(t *testing.T) {
 
 	// ensure the path to git is empty
 	if _git != "" {
-		t.Error("expected empty path from Git(); found %q", _git)
+		t.Errorf("expected empty path from Git(); found %q", _git)
 	}
 } // TestGit()
 
@@ -67,6 +67,6 @@ func TestHasGit(t *testing.T) {
 
 	// HasGit should now fail
 	if gittools.HasGit() {
-		t.Error("unexpected success: HasGit() with PATH %q", os.Getenv("PATH"))
+		t.Errorf("unexpected success: HasGit() with PATH %q", os.Getenv("PATH"))
 	}
 } // TestHasGit()
